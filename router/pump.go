@@ -171,7 +171,7 @@ func (p *LogsPump) update(event *docker.APIEvents) {
 		for r, _ := range p.routes {
 			select {
 			case r <- &update{event, pump}:
-			case <-time.After(time.Second * 15):
+			case <-time.After(time.Second * 1):
 				debug("pump: route timeout, dropping")
 				defer delete(p.routes, r)
 			}
@@ -273,7 +273,7 @@ func (cp *containerPump) send(msg *Message) {
 		}
 		select {
 		case logstream <- msg:
-		case <-time.After(time.Second * 1):
+		case <-time.After(time.Second * 30):
 			debug("pump: send timeout, closing")
 			// normal call to remove() triggered by
 			// route.Closer() may not be able to grab
